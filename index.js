@@ -4,6 +4,7 @@ var io = require('socket.io')(http);
 var fs = require('fs');
 var formidable = require('formidable');
 const jo = require('jpeg-autorotate')
+var port = process.env.PORT || 8080;
 
 io.on('connection', function(socket){
     fs.readdir("./images", (err, files) => {
@@ -47,6 +48,6 @@ io.on('connection', function(socket){
         res.sendFile(__dirname + req.url);
     })
 
-    http.listen(80, function(){
-        console.log('listening on *:80');
+    http.listen(port, function(){
+        console.log('listening on ' + port);
       });
