@@ -4,7 +4,6 @@ var io = require('socket.io')(http);
 var fs = require('fs');
 var formidable = require('formidable');
 const jo = require('jpeg-autorotate')
-var port = process.env.PORT || 8080;
 
 io.on('connection', function(socket){
     fs.readdir("./images", (err, files) => {
@@ -14,32 +13,30 @@ io.on('connection', function(socket){
 });
     const addPhoto = (req,res) =>{
         var form = new formidable.IncomingForm();
-        console.log("parsed form")
         form.parse(req, function (err, fields, files) {
-            console.log("again parsed")
           var oldpath = files.filetoupload.path;
           var newpath = "/images/" + Math.random()+files.filetoupload.name;
           fs.rename(oldpath, "."+newpath, function (err) {
-              console.log("renamed file")
             jo.rotate("."+newpath, {quality:100}, (error, buffer, orientation, dimensions, quality) => {
-                console.log("rotatedfile")
                 if (error) {
+                  console.log('An error occurred when rotating the file: ' + error.message)
                   return
                 }
+                console.log(`Orientation was ${orientation}`)
+                console.log(`Dimensions after rotation: ${dimensions.width}x${dimensions.height}`)
+                console.log(`Quality: ${quality}`);
                 fs.writeFileSync("."+newpath, buffer);
-                console.log("writted filed");
-                io.emit("newPhoto", newpath);
+              })
+            if (err) throw err;
+            io.emit("newPhoto", newpath);
             res.writeHead(200, {'Content-Type': 'text/html'});
             res.write('<meta http-equiv="refresh" content="0;url=/done" />');
             res.end();
-              })
-            if (err) return console.log(err);
           });
      });
     }
     app.post('/add', addPhoto);
-
-    app.set('view engine', 'ejs');
+    
     
     app.get('/view', function(req, res){
         res.sendFile(__dirname + '/viewPhotos.html');
@@ -54,6 +51,6 @@ io.on('connection', function(socket){
         res.sendFile(__dirname + req.url);
     })
 
-    http.listen(port, function(){
-        console.log('listening on ' + port);
+    http.listen(3000, function(){
+        console.log('listening on *:3000');
       });
