@@ -14,15 +14,20 @@ io.on('connection', function(socket){
 });
     const addPhoto = (req,res) =>{
         var form = new formidable.IncomingForm();
+        console.log("parsed form")
         form.parse(req, function (err, fields, files) {
+            console.log("again parsed")
           var oldpath = files.filetoupload.path;
           var newpath = "/images/" + Math.random()+files.filetoupload.name;
           fs.rename(oldpath, "."+newpath, function (err) {
+              console.log("renamed file")
             jo.rotate("."+newpath, {quality:100}, (error, buffer, orientation, dimensions, quality) => {
+                console.log("rotatedfile")
                 if (error) {
                   return
                 }
                 fs.writeFileSync("."+newpath, buffer);
+                console.log("writted filed")
               })
             if (err) throw err;
             io.emit("newPhoto", newpath);
@@ -33,7 +38,7 @@ io.on('connection', function(socket){
      });
     }
     app.post('/add', addPhoto);
-    
+
     app.set('view engine', 'ejs');
     
     app.get('/view', function(req, res){
