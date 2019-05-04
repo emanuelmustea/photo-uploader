@@ -27,13 +27,13 @@ io.on('connection', function(socket){
                   return
                 }
                 fs.writeFileSync("."+newpath, buffer);
-                console.log("writted filed")
-              })
-            if (err) return console.log(err);
-            io.emit("newPhoto", newpath);
+                console.log("writted filed");
+                io.emit("newPhoto", newpath);
             res.writeHead(200, {'Content-Type': 'text/html'});
             res.write('<meta http-equiv="refresh" content="0;url=/done" />');
             res.end();
+              })
+            if (err) return console.log(err);
           });
      });
     }
