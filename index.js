@@ -29,7 +29,7 @@ io.on('connection', function(socket){
                 fs.writeFileSync("."+newpath, buffer);
                 console.log("writted filed")
               })
-            if (err) throw err;
+            if (err) return console.log(err);
             io.emit("newPhoto", newpath);
             res.writeHead(200, {'Content-Type': 'text/html'});
             res.write('<meta http-equiv="refresh" content="0;url=/done" />');
