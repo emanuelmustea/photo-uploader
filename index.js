@@ -34,6 +34,7 @@ io.on('connection', function(socket){
     }
     app.post('/add', addPhoto);
     
+    app.set('view engine', 'ejs');
     
     app.get('/view', function(req, res){
         res.sendFile(__dirname + '/viewPhotos.html');
