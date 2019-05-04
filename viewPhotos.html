@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #view{
+            position:absolute;
+            top:0;
+            right:0;
+            bottom:0;
+            left:0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+            transition:all 500ms;
+            background-color:black;
+        }
+    </style>
+</head>
+<body>
+    <div id="view">
+    </div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://raw.githubusercontent.com/jseidelin/exif-js/master/exif.js"></script>
+<script>
+  var socket = io();
+  var imageList = [];
+  var imageIndex = 0;
+  var isRandom = false;
+  const rotateImages = () => {
+      if(isRandom){
+          const imgId = Math.floor(Math.random() * imageIndex-1)+1;
+          console.log("isRandom", imgId);
+          document.getElementById("view").style.backgroundImage=`url('${imageList[imgId]}')`;
+      }else{
+        document.getElementById("view").style.backgroundImage=`url('${imageList[imageIndex-1]}')`;
+      }
+      if(imageIndex >= imageList.length){
+        isRandom = true;
+      }else{
+        isRandom = false;
+        imageIndex++;
+      }
+      
+  }
+  socket.on("newPhoto", function(src){
+      imageList.push(src);
+      console.log(src);
+  })
+  socket.on("allImages", function(images){
+      imageList = images.map(image => `/images/${image}`);
+      imageIndex = images.length;
+      document.getElementById("view").style.backgroundImage=`url('/images/${images[images.length-1]}')`;
+  })
+  setInterval(rotateImages, 5000);
+
+</script>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "photos-api",
+  "version": "1.0.0",
+  "description": "Simple photos api made by Emanuel Mustea",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js --inspect"
+  },
+  "author": "Emanuel Mustea",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.1.4",
+    "fileupload": "^1.0.0",
+    "formidable": "^1.2.1",
+    "jpeg-autorotate": "^5.0.0",
+    "socket.io": "^2.2.0"
+  }
+}
