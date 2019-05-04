@@ -4,7 +4,7 @@
   "description": "Simple photos api made by Emanuel Mustea",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js --inspect"
+    "start": "node index.js"
   },
   "author": "Emanuel Mustea",
   "license": "ISC",
